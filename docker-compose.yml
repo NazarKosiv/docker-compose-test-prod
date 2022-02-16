@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  nginx:
+    image: nkosiv/k8snginx
+    restart: always
+    ports:
+      - '80:80'
+    depends_on:
+      - visits-api
+      - frontend
+  visits-api:
+    image: nkosiv/k8sapi
+    environment:
+      - RedisConnectionString=$REDIS_HOST
+      - RedisPort=$REDIS_PORT
+    restart: always
+  frontend:
+    image: nkosiv/k8sfrontend
+    depends_on:
+      - visits-api
+    restart: always
